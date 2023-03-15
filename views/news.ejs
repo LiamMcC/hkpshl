@@ -1,0 +1,85 @@
+<%- include('../partials/header') -%>
+
+
+
+<section class="about full-screen d-lg-flex justify-content-center align-items-center" id="about">
+    <div class="container">
+        <div class="row">
+            
+            <div class="col-lg-7 col-md-12 col-12 d-flex align-items-center">
+                <div class="about-text">
+                    
+                    <h1 class="animated animated-text">
+                        <span class="mr-2">News From Happy Kids Pre-School</span>
+                            <div class="animated-info">
+                                <span class="animated-item">100% Outdoor</span>
+                                <span class="animated-item">Child Centred</span>
+                                <span class="animated-item">Enrolling Now</span>
+                            </div>
+                    </h1>
+
+                   
+                    
+                  
+                </div>
+            </div>
+
+            <div class="col-lg-5 col-md-12 col-12">
+                <div class="about-image svg">
+                    <img src="../project/happykidsaboutimage.png" class="img-fluid"  style="width: 40%;" alt="svg image">
+                    
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section >
+    <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-12 mr-lg-5 col-12">
+          
+            <h4>Look At The Amazing Things We Have Been Doing.</h4>
+            
+            <p>Click on any of the links below to read more about what we do.</p>
+
+            <% result.forEach(function(product) { %>
+              <div class="polaroid">
+                <img src="../resized//<%= product.Image %>" class="img-fluid" alt="project image">
+                <div class="container">
+                <h4><%= product.Title %></h4>
+                <% var namex = product.Title 
+                var namexfixed = namex.replace(/ /g , "-");
+                %>
+                
+                
+                <a href="/news/<%= namexfixed %>/<%= product.Id %>" class="btn custom-btn custom-btn-bg custom-btn-link">Read More</a>
+                
+                </div>
+              </div>
+              <% }); %>
+
+
+
+
+              
+             
+
+         
+
+
+        </div>
+
+        
+      </div>
+    </div>
+  </section>
+
+
+
+  
+
+
+<%- include('../partials/footer') -%>

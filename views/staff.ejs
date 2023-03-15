@@ -1,0 +1,54 @@
+<%- include('../partials/header') -%>
+
+
+
+
+
+<section >
+    <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-12 mr-lg-5 col-12">
+          
+            <h2>Get To Know Our Awsome Staff!</h2>
+            
+            <p>Click on any of the links below to read more about each staff member.</p>
+
+            <% result.forEach(function(product) { %>
+              <div class="polaroid">
+                <img src="../resized//<%= product.Image %>" class="img-fluid" alt="project image">
+                <div class="container">
+                <h4><%= product.Name %></h4>
+                <% var namex = product.Name 
+                var namexfixed = namex.replace(/ /g , "-");
+                %>
+                
+                
+                <a href="/aboutstaff/<%= namexfixed %>/<%= product.Id %>" class="btn custom-btn custom-btn-bg custom-btn-link">Read More</a>
+                
+                </div>
+              </div>
+              <% }); %>
+
+
+
+
+              
+             
+
+         
+
+
+        </div>
+
+        
+      </div>
+    </div>
+  </section>
+
+
+
+  
+
+
+<%- include('../partials/footer') -%>

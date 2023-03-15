@@ -1,0 +1,84 @@
+<%- include('../partials/header') -%>
+
+
+
+<section>
+    <div class="container">
+        <h1>
+         <span class="mr-2"><%= result[0].Title %></span>
+        </h1>
+    </div>
+</section>
+
+
+
+<section class="contact py-5" id="contact">
+    <div class="container">
+      <div class="row">
+        
+        <div class="col-lg-12 mr-lg-5 col-12">
+          
+              
+            <div class="polaroid">
+                <img src="../../<%= result[0].Image %>" class="img-fluid" id="myImg" alt="<%= result[0].ImageTitle %>">
+                <div class="container">
+                <p><%= result[0].ImageTitle %></p>
+                </div>
+              </div>
+              
+              
+              <div class="custom-btn-group mt-4">
+                
+                
+              </div>
+
+              
+              <p style="text-align: justify;">
+                <%- result[0].Description %>
+              </p>
+             
+
+
+              <!-- The Modal -->
+<div id="myModal" class="modal">
+  
+  <img class="modal-content" id="img01">
+  <div id="caption"></div>
+  <div id="caption2">Close</div>
+
+</div>
+
+<script>
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the image and insert it inside the modal - use its "alt" text as a caption
+var img = document.getElementById("myImg");
+var modalImg = document.getElementById("img01");
+var captionText = document.getElementById("caption");
+img.onclick = function(){
+  modal.style.display = "block";
+  modalImg.src = this.src;
+  captionText.innerHTML = this.alt;
+}
+
+// Get the <span> element that closes the modal
+var span = document.getElementById("caption2");
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() { 
+  modal.style.display = "none";
+}
+</script>
+          
+
+
+        </div>
+
+        
+      </div>
+    </div>
+  </section>
+
+
+<%- include('../partials/footer') -%>

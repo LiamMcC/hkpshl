@@ -1,0 +1,75 @@
+<%- include('../partials/header') -%>
+
+
+
+<section>
+
+
+    <div class="container">
+    <div class="row">
+      
+      <div class="col-lg-5 mr-lg-5 col-12">
+        Well
+      </div>
+    </div>
+    </div>
+
+
+    <div class="container">
+        <h2>All Images</h2>
+
+<% for (var i = 0; i < files.length; i++) { %>
+    <div style="width:30%; display:inline-block">
+        <% var xxx =  files[i] %>
+        <img src="../../<%= xxx %>" class="img-fluid" id="myImg"  alt="<%= files[i].ImageTitle %>">
+        <p id="<%= [i] %>"><%= files[i] %></p>
+      <p id="i<%= [i] %>">Delete</p>
+       
+        <p id="p<%= [i] %>" style="display:none; position: fixed;top: 100px; left: 20%; width:60%; background-color: rgba(2, 2, 2, .6); padding:100px; border-radius: 10px;">
+            
+            Are You sure?
+            <br><br>
+            <button id="no<%= [i] %>" style="background-color: rgb(216, 22, 22);" class="btn custom-btn custom-btn-bg custom-btn-link">No Cancel</button>
+            <br><br>
+            
+            <a href="/deleteimage/<%= files[i] %>" style="background-color: green;" class="btn custom-btn custom-btn-bg custom-btn-link">Yes Deletd</a>
+        </p>
+
+<script>
+
+
+$(document).ready(function(){
+  $("#i<%= [i] %>").click(function(){
+    $("#p<%= [i] %>").slideToggle(2000)
+    
+  });
+
+  $("#no<%= [i] %>").click(function(){
+    $("#p<%= [i] %>").slideUp(2000)
+    
+  });
+  
+});
+
+
+</script>
+    
+    </div>
+ 
+      
+    
+    <% } %>
+
+
+    </div>
+</section>
+
+
+<% files.forEach(function(product) { %>
+
+    <%= product.Id %>
+    <% }); %>
+
+
+
+    <%- include('../partials/footer') -%>
