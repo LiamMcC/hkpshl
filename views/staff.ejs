@@ -13,9 +13,9 @@
             <h2>Get To Know Our Awsome Staff!</h2>
             
             <p>Click on any of the links below to read more about each staff member.</p>
-
+          </div>
             <% result.forEach(function(product) { %>
-              <div class="polaroid">
+              <div class="col-lg-6 col-12" >
                 <img src="../resized//<%= product.Image %>" class="img-fluid" alt="project image">
                 <div class="container">
                 <h4><%= product.Name %></h4>
@@ -30,20 +30,11 @@
               </div>
               <% }); %>
 
-
-
-
-              
-             
-
-         
-
-
         </div>
 
         
       </div>
-    </div>
+ 
   </section>
 
 

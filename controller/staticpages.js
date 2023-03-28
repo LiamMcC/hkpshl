@@ -6,30 +6,42 @@ router.use(bodyParser.urlencoded({extended:true}));
 var db = require('../db');
 router.use(require('./user'))
 
-
+var Email = require('./email')
 
 // function to render the home page
 router.get('/', function(req, res){
   let sql = 'select * from about where onShow  = "Show" LIMIT 4; select * from news where onShow  = "Show" LIMIT 4';
-  let query = db.query(sql, (err,result) => {     
-      if(err) throw err;    
-      res.render('home', {result, user: req.user});    
+  let query = db.query(sql, (err, result) => {  
+    
+      if(err) throw err;  
+      var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+      var title = "Happy Kids Pre School :" + result[0][0].Title 
+      var description = "Happy Kids Pre School is a fully outdoor pre-schooll in Dean Hill Navan co. Meath. We have fully qualified staff and pride ourselves on our facilities"
+      res.render('home', {result, user: req.user, title, description,cookiePolicyAccept});    
       });  
   });
 
 
 // function to render the contact page
 router.get('/contact', function(req, res){
-    res.render('contact', {user: req.user});
+  var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+  var title = "Happy Kids Pre School : We Would Love To Hear From You " 
+  var description = "Happy Kids Pre School: Please get in touch so we can discuss your childs education from the very start." 
+    res.render('contact', {user: req.user, title, description, cookiePolicyAccept});
   });
 
 
 // function to render the about page
 router.get('/about', function(req, res){
+  
     let sql = 'select * from about ORDER BY myChoice ASC';
     let query = db.query(sql, (err,result) => {
+
         if(err) throw err;
-        res.render('about', {result, user: req.user});
+        var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+        var title = "Happy Kids Pre School: " + result[0].Title  
+        var description = "Happy Kids Pre School :" + result[0].Description 
+        res.render('about', {result, user: req.user, title, description, cookiePolicyAccept});
     });
 });
 
@@ -38,7 +50,10 @@ router.get('/about/:which/:id', function(req, res){
   let sql = 'select * from about where Id = ?';
   let query = db.query(sql,[req.params.id], (err,result) => {
       if(err) throw err;
-      res.render('details', {result, user: req.user});
+      var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+      var title = "Happy Kids Pre School: " + result[0].Title  
+      var description = "Happy Kids Pre School :" + result[0].Description 
+      res.render('details', {result, user: req.user, title, description,cookiePolicyAccept});
       });
 });
 
@@ -48,7 +63,10 @@ router.get('/news', function(req, res){
   let sql = 'select * from news ORDER BY Id DESC';
   let query = db.query(sql, (err,result) => {
       if(err) throw err;
-      res.render('news', {result, user: req.user});
+      var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+      var title = "Happy Kids Pre School: " + result[0].Title  
+      var description = "Happy Kids Pre School :" + result[0].Description 
+      res.render('news', {result, user: req.user, title, description,cookiePolicyAccept});
       });
 });
 
@@ -59,7 +77,10 @@ router.get('/news/:which/:id', function(req, res){
   let sql = 'select * from news where Id = ?';
   let query = db.query(sql,[req.params.id], (err,result) => {
       if(err) throw err;
-      res.render('details', {result, user: req.user});
+      var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+      var title = "Happy Kids Pre School: " + result[0].Title 
+      var description = "Happy Kids Pre School :" + result[0].Description  
+      res.render('details', {result, user: req.user, title, description, cookiePolicyAccept});
       });
 });
 
@@ -70,7 +91,10 @@ router.get('/staff', function(req, res){
   let sql = 'select * from staff ORDER BY myChoice ASC';
   let query = db.query(sql, (err,result) => {
       if(err) throw err;
-      res.render('staff', {result, user: req.user});
+      var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+      var title = "Happy Kids Pre School: We are so proud of our staff"  
+      var description = "Happy Kids Pre School : All our staff are fully qualified and always put the children first" 
+      res.render('staff', {result, user: req.user, title, description, cookiePolicyAccept});
       });
 });
 
@@ -81,13 +105,82 @@ router.get('/aboutstaff/:who/:id', function(req, res){
   let sql = 'select * from staff where Id = ?';
   let query = db.query(sql,[req.params.id], (err,result) => {
       if(err) throw err;
-      res.render('staffdetails', {result, user: req.user});
+      var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+      var title = "Happy Kids Pre School: " + result[0].Name  
+      var description = "Happy Kids Pre School : "  + result[0].description
+      res.render('staffdetails', {result, user: req.user, title, description, cookiePolicyAccept});
       });
 });
 
+// contact route 
+
+router.get('/thankyou', function(req, res){ 
+  var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+  var title = "Happy Kids Pre School Contact Page"
+      var description = "Thank You For Contacting Happy Kids Pre School" 
+  res.render('thankyou', {user: req.user, title, description,cookiePolicyAccept});
+});
+
+router.get('/cookiepolicy', function(req, res){ 
+  var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+  var title = "Happy Kids Pre School Contact Page"
+      var description = "Thank You For Contacting Happy Kids Pre School" 
+  res.render('cookiepolicy', {user: req.user, title, description,cookiePolicyAccept});
+});
+
+router.post('/contact', function(req, res){ 
+  if (req.body.verifybox == "Paris" || req.body.verifybox == "paris" || req.body.verifybox == "PARIS") {
+  Email.contact(req.body.name, req.body.email, req.body.message, req.body.verifybox)
+  res.redirect("/thankyou")
+  } else {
+
+    res.redirect("/wrongcaptcha")
+  }
+});
+
+router.get('/wrongcaptcha', function(req, res, next) {
+  var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+  res.render('wrongcaptcha', {user: req.user, cookiePolicyAccept})
+});
+
+// contact route
+
+
+// Cookie Route
+router.get('/acceptCookie', function(req, res) {
+
+  let options = {
+      maxAge: 1000 * 60 * 90 // would expire after 90 minutes
+      //httpOnly: true, // The cookie only accessible by the web server
+    // signed: true // Indicates if the cookie should be signed
+  }
+ 
+  res.cookie('acceptCookieBrowsing', '1', options) // options is optional
+  //res.send('')
+
+
+ 
+  res.redirect(req.get('referer'));
+ //res.redirect('/');
+ });
 
 
 
+ router.get('/cancelCookie', function(req, res) {
+  let options = {
+      maxAge: 1000 * 60 * 90 // would expire after 90 minutes
+      //httpOnly: true, // The cookie only accessible by the web server
+    // signed: true // Indicates if the cookie should be signed
+  }
+ 
+  res.cookie('acceptCookieBrowsing', '0', options) // options is optional
+  //res.send('')
+ 
+ // res.redirect(req.get('referer'));
+ res.redirect('/');
+ });
+
+// Cookie Route
 
 
 // ******************************************** Remove these routes 
@@ -116,37 +209,9 @@ router.get('/aboutstaff/:who/:id', function(req, res){
   });
 
 
-// Test Route Get Rid
-  router.get('/products', function(req,res){
-    // Create a table that will show product Id, name, price, image and sporting activity
-    let sql = 'ALTER TABLE staff add (description text)';
-    
-    let query = db.query(sql, (err,result) => {
-        
-        if(err) throw err;
-        
-        
-        
-        res.send(result)
-        
-    });
-    
-    //res.send("You created your first Product")
-    
-})
 
 
-router.get('/me/delete/:id', function(req, res){
-    
-  let sql = 'delete from about where Id = ?';
-  let query = db.query(sql,[req.params.id], (err,result) => {
-      
-      if(err) throw err;
-      console.log(result)
-      res.send(result);
-      
-  });
-});
+
 
 
 

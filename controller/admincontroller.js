@@ -3,10 +3,12 @@ var express = require('express');
 var router = express.Router();
 var bodyParser = require("body-parser") // call body parser module and make use of it
 router.use(bodyParser.urlencoded({extended:true}));
+
+var bcrypt = require('bcrypt-nodejs');
 var db = require('../db');
 router.use(require('./user'))
 // function to render the home page
-
+var Email = require('./email')
 
 const multer = require('multer');
 const path = require('path');
@@ -45,12 +47,15 @@ function isAdmin(req, res, next) {
 }
 
 router.get('/administration', isLoggedIn, isAdmin, function(req, res){
-    res.render('adminpage', {user: req.user});
+  var adminRights = req.user.adminRights 
+  var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+    res.render('adminpage', {user: req.user, adminRights, cookiePolicyAccept});
   });
 
 
-router.get('/addabout', isLoggedIn, isAdmin, function(req, res){    
-    res.render('addabout', {user: req.user});
+router.get('/addabout', isLoggedIn, isAdmin, function(req, res){  
+  var cookiePolicyAccept = req.cookies.acceptCookieBrowsing  
+    res.render('addabout', {user: req.user, cookiePolicyAccept});
   });
 
 
@@ -59,24 +64,18 @@ router.get('/allabout', isLoggedIn, isAdmin, function(req, res){
   let sql = 'select * from about';
   let query = db.query(sql, (err,result) => { 
       if(err) throw err;
-      res.render('allabout', {result, user: req.user});
+      var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+      res.render('allabout', {result, user: req.user,cookiePolicyAccept});
       });
   });
+ 
 
-
-
-  
-
-
-
-    
-
-
-  router.get('/editabout/:which/:id', function(req, res){ 
+  router.get('/editabout/:which/:id', isLoggedIn, isAdmin, function(req, res){ 
     let sql = 'select * from about where Id = ?';
     let query = db.query(sql,[req.params.id], (err,result) => {       
         if(err) throw err;    
-        res.render('editabout', {result, user: req.user});        
+        var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+        res.render('editabout', {result, user: req.user, cookiePolicyAccept});        
     });
   });
   
@@ -111,7 +110,7 @@ router.post('/addabout', isLoggedIn, isAdmin, upload.single("image"), async func
   router.get('/deleteabout/:id', isLoggedIn, isAdmin, upload.single("image"), async function(req, res){
     let sql = 'DELETE FROM about WHERE Id = ?';
     let query = db.query(sql, [req.params.id],(err,res) => {
-        
+      
         if(err) throw err;
       
     });
@@ -143,12 +142,15 @@ router.get('/allnews', isLoggedIn, isAdmin, function(req, res){
   let sql = 'select * from news';
   let query = db.query(sql, (err,result) => {
       if(err) throw err;
-      res.render('allnews', {result, user: req.user});
+      var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+      res.render('allnews', {result, user: req.user, cookiePolicyAccept});
       });
   });
 
 router.get('/addnews', isLoggedIn, isAdmin, function(req, res){    
-    res.render('addnews', {user: req.user});
+    var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+    res.render('addnews', {user: req.user, cookiePolicyAccept});
+    
   });
 
 
@@ -179,11 +181,12 @@ router.post('/addnews', isLoggedIn, isAdmin, upload.single("image"), async funct
 
 
 
-router.get('/editnews/:which/:id', function(req, res){ 
+router.get('/editnews/:which/:id', isLoggedIn, isAdmin, function(req, res){ 
   let sql = 'select * from news where Id = ?';
   let query = db.query(sql,[req.params.id], (err,result) => {       
       if(err) throw err;    
-      res.render('editnews', {result, user: req.user});        
+      var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+      res.render('editnews', {result, user: req.user, cookiePolicyAccept});        
   });
 });
 
@@ -213,12 +216,14 @@ router.get('/allstaff', isLoggedIn, isAdmin, function(req, res){
   let sql = 'select * from staff';
   let query = db.query(sql, (err,result) => {
       if(err) throw err;
-      res.render('allstaff', {result, user: req.user});
+      var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+      res.render('allstaff', {result, user: req.user, cookiePolicyAccept});
       });
   });
 
-router.get('/addstaff', isLoggedIn, isAdmin, function(req, res){    
-    res.render('addstaff', {user: req.user});
+router.get('/addstaff', isLoggedIn, isAdmin, function(req, res){ 
+  var cookiePolicyAccept = req.cookies.acceptCookieBrowsing   
+    res.render('addstaff', {user: req.user, cookiePolicyAccept});
   });
 
 
@@ -249,11 +254,12 @@ router.post('/addstaff', isLoggedIn, isAdmin, upload.single("image"), async func
 
 
 
-router.get('/editstaff/:who/:id', function(req, res){ 
+router.get('/editstaff/:who/:id' , isLoggedIn, isAdmin, function(req, res){ 
   let sql = 'select * from staff';
   let query = db.query(sql, (err,result) => {
       if(err) throw err;
-      res.render('editstaff', {result, user: req.user});
+      var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+      res.render('editstaff', {result, user: req.user, cookiePolicyAccept});
       });
   });
 
@@ -278,7 +284,8 @@ router.post('/editstaff/:who/:id', isLoggedIn, isAdmin, upload.single("image"), 
 // ************** Content Routes
 
 router.get('/websitedata',  isLoggedIn, isAdmin, function(req, res){ 
-    res.render('websitedata', {user: req.user})
+  var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+    res.render('websitedata', {user: req.user, cookiePolicyAccept})
 });
 
 
@@ -289,7 +296,8 @@ router.get('/allimages',  isLoggedIn, isAdmin, function(req, res){
       files.forEach(file => {
         //console.log(file);
       });
-      res.render('allimages', {user: req.user, files})
+      var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+      res.render('allimages', {user: req.user, files, cookiePolicyAccept})
     });
 });
   
@@ -309,7 +317,8 @@ fs.unlink(path + req.params.id, (err) => {
 
 
 router.get('/newimage',  isLoggedIn, isAdmin, function(req, res){ 
-  res.render('newimage', {user: req.user})
+  var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+  res.render('newimage', {user: req.user, cookiePolicyAccept})
 });
 
 
@@ -330,4 +339,34 @@ router.post('/newimage', isLoggedIn, isAdmin, upload.single("image"), async func
 
 // ************** Content Routes
 
+
+
+// ************************ reset Password Links
+
+
+router.get('/resetpassword', function(req, res, next) {
+  var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+  res.render('resetpassword', {user: req.user,cookiePolicyAccept})
+});
+
+
+router.post('/changepassword',  isLoggedIn, isAdmin, function(req, res, next){  // I have this restricted for admin just for proof of concept
+  //let sql = 'select * FROM clue where status = "active"; ' 
+  var deletedAcc = bcrypt.hashSync(req.body.password, null, null)  // use the generateHash function in our user model
+  let sql = 'update users set password = "'+deletedAcc+'" where userName = "'+req.user.userName+'";' 
+
+    
+
+  let query = db.query(sql, (err,result) => {
+     if(err) throw err;
+     Email.resetPass()
+      res.redirect('/logout')
+      
+  });
+
+ });
+
+
+
+// ************************ reset Password Links
   module.exports = router;

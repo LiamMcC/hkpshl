@@ -23,7 +23,19 @@ app.use(express.static("uploads/resized"));
 app.use(require('./routes.js'));
 
 
-
+//catch all endpoint will be Error Page
+app.get("*", function(req,res){
+  var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+  res.render('oops', {cookiePolicyAccept});
+});
+    
+      // custom error handling if it is 404 render 404 page
+app.use((req, res, next) => {
+  const err = new Error(res.render('oops'))
+  err.status = 404
+  //res.render('oops');
+  next(err) 
+});
 
 
 

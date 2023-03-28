@@ -61,8 +61,8 @@ function isAdmin(req, res, next) {
 
 // function to render the home page
 router.get('/admin', function(req, res){
-    
-    res.render('admin'), {user : req.user};
+    var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
+    res.render('admin'), {user : req.user, cookiePolicyAccept};
     
   });
 
@@ -76,9 +76,9 @@ router.get('/admin', function(req, res){
 	// =====================================
 	// show the login form
 	router.get('/login', function(req, res) {
-        
+        var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
 		// render the page and pass in any flash data if it exists
-		res.render('login');
+		res.render('login', {cookiePolicyAccept});
 	});
 
 	// process the login form
@@ -104,9 +104,9 @@ router.get('/admin', function(req, res){
 	// =====================================
 	// show the signup form
 	router.get('/signup', function(req, res) {
-        
+        var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
 		// render the page and pass in any flash data if it exists
-		res.render('register', {user : req.user});
+		res.render('register', {user : req.user, cookiePolicyAccept});
 	});
 
 	// process the signup form
@@ -116,32 +116,6 @@ router.get('/admin', function(req, res){
 		failureFlash : true // allow flash messages
 	}));
 
-	// =====================================
-	// PROFILE SECTION =========================
-	// =====================================
-	// we will want this protected so you have to be logged in to visit
-	// we will use route middleware to verify this (the isLoggedIn function)
-	router.get('/profile', function(req, res) {
-        
-        let sql = 'select DISTINCT userName FROM winners LIMIT 3; select * from clue order by clueId DESC Limit 1;SELECT * FROM clue left JOIN userComps ON clue.clueId=userComps.comp where clue.status= "active" and userComps.username = "'+req.user.userName+'" order by comp DESC limit 1;SELECT * FROM clue left JOIN userComps ON clue.clueId=userComps.comp where userComps.username = "'+req.user.userName+'" order by comp DESC;;' 
-        let query = db.query(sql, (err,result) => {
-            
-           
-           if(err) throw err;
-           res.render('admin', {
-            user : req.user,result // get the user out of session and pass to template
-        });
-       
-            
-        });
-
-
-		
-	});
-
-
-   
-	
 
     router.get('/logout', function(req, res, next) {
         req.logout(function(err) {

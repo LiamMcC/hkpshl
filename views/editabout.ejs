@@ -39,12 +39,13 @@
                         <textarea rows="4" class="form-control" name="blurb"><%= result[0].summary %></textarea>
                       </div>
 
-                      <% var desx = result[0].Description 
-                      var desfixed = desx.replaceAll("<br>" , "\n");
+                      <% var desx = result[0].Description  
+                      
+                      var desfixed = desx.replace(/<br\s*\/?>/g, '\n ');
                       %>
 
                       <div class="col-12">
-                        <textarea rows="6" class="form-control" name="description" ><%- desfixed %></textarea>
+                        <textarea rows="6" class="form-control" name="description" ><%= desfixed %></textarea>
                       </div>
 
                       <div class="col-lg-12 col-12">

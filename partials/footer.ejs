@@ -16,9 +16,9 @@
               </div>
 
               <ul class="social-links">
-                   <li><a href="#" class="uil uil-dribbble" data-toggle="tooltip" data-placement="left" title="Dribbble"></a></li>
-                   <li><a href="#" class="uil uil-instagram" data-toggle="tooltip" data-placement="left" title="Instagram"></a></li>
-                   <li><a href="#" class="uil uil-youtube" data-toggle="tooltip" data-placement="left" title="Youtube"></a></li>
+                  
+                   <li><a href="https://www.instagram.com/happykidsnavan" class="uil uil-instagram" data-toggle="tooltip" data-placement="left" title="Instagram"></a></li>
+                   
               </ul>
           </div>
         </div>
@@ -27,7 +27,7 @@
           <div class="contact-form">
             <h2 class="mb-4">Want to chat about your child? Let's talk</h2>
 
-            <form action="" method="get">
+            <form action="/contact" method="post">
               <div class="row">
                 <div class="col-lg-6 col-12">
                   <input type="text" class="form-control" name="name" placeholder="Your Name" id="name">
@@ -39,6 +39,10 @@
 
                 <div class="col-12">
                   <textarea name="message" rows="6" class="form-control" id="message" placeholder="Message"></textarea>
+                </div>
+
+                <div class="col-lg-12 col-12">
+                  <input type="text" class="form-control" name="verifybox" placeholder="What Is The Capital Of France" id="verifybox">
                 </div>
 
                 <div class="ml-lg-auto col-lg-5 col-12">
@@ -58,7 +62,8 @@
         <div class="container">
              <div class="row">
               <div class="col-lg-12 col-12"> 
-
+                <h4>To Opt Out Of Our Website Cookies <a href="/cancelCookie">click here</a></h4>
+                <h4>To View Our Website Cookies Policy <a href="/cookiepolicy">click here</a></h4>
               <% if (isAuthenticated) { %>
                 <p class="copyright-text text-center"><a href="/logout" >Log Out</a></a></p>
                
@@ -71,10 +76,10 @@
                 <% } %>
               <%} else { %>
                
-                <p class="copyright-text text-center"><a href="/login" >Log-In</a></p>
+                <p class="copyright-text text-center"><a href="/login" >Staff Log-In</a>  
             
               
-                <p class="copyright-text text-center"><a href="/signup" >Sign Up</a></p>
+                <a href="/signup" >Sign Up</a></p>
            
             <% } %>
               </div>
@@ -88,6 +93,24 @@
                   
              </div>
         </div>
+        <% if(cookiePolicyAccept == 1){ %>
+    
+          <% } else{ %>  
+        <div class="cookieAgree" id="cookieBar">
+        <div class="cookiemodal2">
+          <div class="cookieNotice">
+            <h2 style="color:aliceblue">Cookies!</h2>
+            <h4>Domain Cookies</h4>
+                <p style="color:aliceblue">This website use a session cookie to enhance your user experience, so you can navigate through the site. No personal information is stored with this cookie and it is deleted once you leave the website.</p>
+                  <h4>Third Party Cookies</h4>
+                  <p style="color:aliceblue">This website embeds an interactive Google Map. Google will set cookies to store information and preferences about maps or other associated Google services on pages where we embed Google maps.  If you are logged into your Google account, your behaviour may be linked with your personal profile. You can prevent this by logging out of Google.  </p>
+        
+                  <p> <a href="/acceptCookie" class="btn custom-btn custom-btn-bg custom-btn-link">Agree</a></p>
+                  <p> <a href="/rejectedCookie" class="btn custom-btn custom-btn-bg custom-btn-link">Reject</a></p>
+          </div>
+        </div>
+
+        <% } %>
    </footer>
 
   <script src="../../jquery-3.3.1.min.js"></script>
@@ -98,6 +121,8 @@
   <script src="../../owl.carousel.min.js"></script>
   <script src="../../smoothscroll.js"></script>
   <script src="../../custom.js"></script>
+
+
 
 </body>
 </html>

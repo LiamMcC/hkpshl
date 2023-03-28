@@ -6,7 +6,7 @@ router.use(bodyParser.urlencoded({extended:true}));
 
 router.use(require('./controller/admincontroller'))
 router.use(require('./controller/staticpages'))
-router.use(require('./controller/admin'))
+
 
 
 

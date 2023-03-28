@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="<%= typeof description != 'undefined' ? description : 'Happy Kids Pre School is a  Fully Outdoor Preschool In Deanhill Navan Co. Meath get in touch to chat about starting your childs educational journey with us' %>  ">
+    <meta name="author" content="Liam McCabe">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <title>Happy Kids</title>
+    <title><%= typeof title != 'undefined' ? title : 'Happy Kids Pre School. Fully Outdoor Preschool In Deanhill Navan Co. Meath' %>  </title>
 
     <link rel="stylesheet" href="../../bootstrap.min.css">
     <link rel="stylesheet" href="../../unicons.css">
@@ -286,7 +286,31 @@ input[type=file]::file-selector-button {
 
 /* End 2nd delete modal */
 
+/* Cookie */
 
+.cookiemodal2 {
+  
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  padding-top: 100px; /* Location of the box */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+  text-align: center;
+}
+
+.cookieNotice {
+width: 70%;
+min-height: 300px;
+background-color: rgb(214, 142, 33);
+margin: auto;
+border-radius: 10px;
+
+}
 
 
 
@@ -322,24 +346,21 @@ input[type=file]::file-selector-button {
                         <a href="/contact" class="nav-link"><span data-hover="Contact">Contact</span></a>
                     </li>
                    
+                   
+
                     <% if (isAuthenticated) { %>
                 <li class="nav-item">
                   <a href="/logout" class="nav-link"><span data-hover="Contact">Log Out</span></a>
               </li>
 
-              <% if (user.adminRights == true) { %>
+          
                 <li class="nav-item">
                   <a href="/administration" class="nav-link"><span data-hover="Admin">Admin</span></a>
               </li>
 
-                <% } %>
+             
               <%} else { %>
-                <li class="nav-item">
-                  <a href="/login" class="nav-link"><span data-hover="Log-In">Log-In</span></a>
-              </li>
-              <li class="nav-item">
-                <a href="/signup" class="nav-link"><span data-hover="Sign Up">Sign Up</span></a>
-            </li>
+             
             <% } %>
                 </ul>
 
