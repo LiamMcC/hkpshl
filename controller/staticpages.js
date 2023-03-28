@@ -200,7 +200,7 @@ router.get('/acceptCookie', function(req, res) {
         
         if(err) throw err;
        
-        console.log(res);
+      
         
     });
     

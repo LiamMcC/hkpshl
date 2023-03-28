@@ -71,13 +71,9 @@ router.get('/admin', function(req, res){
 
   // ---------------------------- Auth -----------------------------------
 
-  // =====================================
-	// LOGIN ===============================
-	// =====================================
-	// show the login form
 	router.get('/login', function(req, res) {
         var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
-		// render the page and pass in any flash data if it exists
+		
 		res.render('login', {cookiePolicyAccept});
 	});
 
@@ -99,22 +95,7 @@ router.get('/admin', function(req, res){
         res.redirect('/');
     });
 
-	// =====================================
-	// SIGNUP ==============================
-	// =====================================
-	// show the signup form
-	router.get('/signup', function(req, res) {
-        var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
-		// render the page and pass in any flash data if it exists
-		res.render('register', {user : req.user, cookiePolicyAccept});
-	});
 
-	// process the signup form
-	router.post('/signup', passport.authenticate('local-signup', {
-		successRedirect : '/admin', // redirect to the secure profile section
-		failureRedirect : '/', // redirect back to the signup page if there is an error
-		failureFlash : true // allow flash messages
-	}));
 
 
     router.get('/logout', function(req, res, next) {
@@ -125,11 +106,7 @@ router.get('/admin', function(req, res){
       });
 
 
- // =========================================================================
-    // passport session setup ==================================================
-    // =========================================================================
-    // required for persistent login sessions
-    // passport needs ability to serialize and unserialize users out of session
+
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
@@ -146,53 +123,6 @@ router.get('/admin', function(req, res){
         });
     });
 
-    // =========================================================================
-    // =========================================================================
-    // we are using named strategies since we have one for login and one for signup
-    // by default, if there was no name, it would just be called 'local'
-
-  passport.use(
-        'local-signup',
-        new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
-            usernameField : 'username',
-            passwordField : 'password',
-            passReqToCallback : true // allows us to pass back the entire request to the callback
-        },
-        function(req, username, password, done) {
-            // find a user whose email is the same as the forms email
-            // we are checking to see if the user trying to login already exists
-            db.query("SELECT * FROM users WHERE userName = ?",[username], function(err, rows) {
-                if (err)
-                    return done(err);
-                if (rows.length) {
-                    return done(null, false, req.flash('signupMessage', 'That username is already taken.'));
-                } else {
-                    // if there is no user with that username
-                    // create the user
-                    var newUserMysql = {
-                        username: username,
-                        email: req.body.email,
-                        password: bcrypt.hashSync(password, null, null)  // use the generateHash function in our user model
-                    };
-
-                    var insertQuery = "INSERT INTO users ( userName, uemail, password ) values (?,?,?)";
-                   
-                    db.query(insertQuery,[newUserMysql.username, newUserMysql.email, newUserMysql.password],function(err, rows) {
-                        newUserMysql.Id = rows.insertId;
-
-                        return done(null, newUserMysql);
-                    });
-                }
-            });
-        })
-    );
-
-    // =========================================================================
-    // LOCAL LOGIN =============================================================
-    // =========================================================================
-    // we are using named strategies since we have one for login and one for signup
-    // by default, if there was no name, it would just be called 'local'
 
     passport.use(
         'local-login',
@@ -219,12 +149,6 @@ router.get('/admin', function(req, res){
             });
         })
     );
-
-
-
-
-
-
 
 
       // ----------------------------- Auth End ------------------------

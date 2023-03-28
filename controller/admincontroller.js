@@ -294,7 +294,7 @@ router.get('/allimages',  isLoggedIn, isAdmin, function(req, res){
     const testFolder = './uploads/resized/';
       fs.readdir(testFolder, (err, files) => {
       files.forEach(file => {
-        //console.log(file);
+       
       });
       var cookiePolicyAccept = req.cookies.acceptCookieBrowsing
       res.render('allimages', {user: req.user, files, cookiePolicyAccept})
@@ -356,10 +356,10 @@ router.post('/changepassword',  isLoggedIn, isAdmin, function(req, res, next){  
   let sql = 'update users set password = "'+deletedAcc+'" where userName = "'+req.user.userName+'";' 
 
     
-
+var toWho = req.user.uemail
   let query = db.query(sql, (err,result) => {
      if(err) throw err;
-     Email.resetPass()
+     Email.resetPass(toWho)
       res.redirect('/logout')
       
   });
