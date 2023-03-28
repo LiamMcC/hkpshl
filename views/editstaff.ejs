@@ -32,7 +32,7 @@
                       </div>
 
                       <% var desx = result[0].description 
-                      var desfixed = desx.replaceAll("<br>" , "\n");
+                      var desfixed = desx.replace(/<br\s*\/?>/g, '\n ');
                       %>
 
                       <div class="col-12">
